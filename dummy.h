@@ -1,13 +1,14 @@
-#include "node.h"
 #include<string>
 #include<vector>
+#include<map>
+#include<iostream>
 using namespace std;
-class Trie {
+class Dummy {
     private:
-        vector<Node> nodes;
         int nextIndex;
+        map<string, int> dict;
     public:
-        Trie();
+        Dummy();
         void add(string word);
         int find(string word);
 

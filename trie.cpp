@@ -2,6 +2,16 @@
 #include<iostream>
 #include<string>
 using namespace std;
+Trie::Trie(){
+    nextIndex = 256;
+    for(int i=0; i<256; i++){
+    	Node n;
+    	n.letter = i;
+    	n.number = i;
+        nodes.push_back(n);
+    }
+}	
+
 int Trie::find(string word){
     
     int j = -1;
@@ -13,19 +23,26 @@ int Trie::find(string word){
 }
 
 void Trie::add(string word) {
-	bool exists = false;
-    for(int i=0; i<nodes.size(); i++){
+//	cout<<"Lisataa "<<word<<endl;
+//	bool exists = false;
+  /*  for(int i=0; i<nodes.size(); i++){
     	if(nodes[i].letter==word[0]){
             exists = true;
-            nodes[i].addWord(word, 1);
+    */        nodes[word[0]].addWord(word, nextIndex, 1);
+      /*  
         }
-    }
+    }*//*
     if(!exists){
         Node n;
         n.letter = word[0];
- //        n.number = 117; // private
-//        n.children = new vector<Node>; // ei tarvi
+        n.number = word[0];
+        n.addWord(word, nextIndex, 1);
         nodes.push_back(n);
-        n.addWord(word, 1);
+    }*/
+    nextIndex++;
+    for(int i=0;i<nodes.size();i++) {
+    	nodes[i].debug();
     }
+//    cout<<"----\n";
 }
+
