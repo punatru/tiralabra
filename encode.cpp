@@ -1,19 +1,14 @@
-#include<iostream>
 #include "trie.h"
 #include<string>
 #include<fstream>
-#include "dummy.h"
+#include<iostream>
 using namespace std;
 
-int maain() {
-    Trie trie;
- //   trie.add("m");
-    trie.add("mo");
-  //  trie.add("moi");
-    cout<<trie.find("mo")<<endl;
-}
-
 int main(int argc, char *argv[]) {
+	if(argc!=3){
+        cout<<"Usage: ./lzw inputfile outputfile"<<endl;
+        return 0;
+	}
     ifstream fin;
     fin.open(argv[1]);
 
@@ -21,20 +16,17 @@ int main(int argc, char *argv[]) {
     fout.open(argv[2]);
 
     string word;
-    word += fin.get();
+    word = fin.get();
 
     Trie trie;
 
     while(!fin.eof()){
         char a = fin.get();
-//        cout<<a<<endl;
         int code = trie.find(word+a);
         if(code!=-1){
             word = word+a;
-        	cout<<code;
         }else{
-        	cout<<word<<" "<<trie.find(word)<<endl;
-        fout<<trie.find(word)<<" ";
+            fout<<trie.find(word)<<" ";
             trie.add(word+a);
             word = a;
         }

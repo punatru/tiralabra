@@ -1,15 +1,16 @@
 #include<vector>
 #include<string>
-#include<iostream>
 using namespace std;
 class Node{
     private:
-        vector<Node> children;
+        vector<Node*> children;
+        Node* parent;
 
     public:
+        Node(char letter, int code, Node* parent);
         int findWord(string word, int index);
-        void addWord(string word, int code,  int index);
+        Node* addWord(string word, int code,  int index);
+        string translate();
         char letter;
-        int number;
-        void debug();
+        int code;
 };

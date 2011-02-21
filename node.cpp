@@ -1,51 +1,51 @@
 #include "node.h"
 #include<string>
 
-void Node::addWord(string word, int code, int index){
-//    cout<<"Lisataan "<<word<<" index "<<index<<"("<<code<<")"<<endl;
+Node::Node(char letter, int code, Node* parent){
+    this->letter = letter;
+    this->code = code;
+    this->parent = parent;
+}	
+
+Node* Node::addWord(string word, int newcode, int index){
+
     if(index>=word.size()){
-        return;
+        return this;
     }
-
-    bool exists = false;
+    
     for(int i=0; i<children.size(); i++){
-        if(children[i].letter==word[index]){
-            children[i].addWord(word, code,index+1);
-            exists = true;
+        if(children[i]->letter==word[index]){
+            return children[i]->addWord(word, newcode,index+1);   
         }
-
     }
-    if(!exists){
-        Node n;
-        n.letter = word[index];
-        n.number = code;
-        n.addWord(word, code, index+1);
-        children.push_back(n);
-    }
+    
+	Node* n = new Node(word[index], newcode, this);
+    children.push_back(n);
+    return n;
 }
 
 int Node::findWord(string word, int index){
     if(word[index] == letter){
     	if(index==word.size()-1){
-            return number;
+            return code;
     	}
         int j = -1;
         for(int i=0; i<children.size(); i++){
-            j =  children[i].findWord(word, index+1);
+            j =  children[i]->findWord(word, index+1);
             if(j!=-1) return j;
         }
     }
     return -1;
-
 }
-void Node::debug(){
-  /*  cout<<number<<": "<<letter<<" (";
-    for(int i=0;i<children.size();i++) {
-    	cout<<children[i].letter<<"\t";
-    }
-    cout<<")\n";
-   */ for(int i=0;i<children.size();i++) {
-    	children[i].debug();
-    	}
 
+string Node::translate(){
+    if(this->parent==0){
+    
+        string word="";
+        word+=this->letter;
+        return word;
+    }
+    string translation = this->parent->translate();
+    translation.push_back(this->letter);
+    return translation;
 }

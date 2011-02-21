@@ -4,11 +4,12 @@
 using namespace std;
 class Trie {
     private:
-        vector<Node> nodes;
+        vector<Node*> children;
         int nextIndex;
     public:
         Trie();
+        vector<Node*> nodes;
         void add(string word);
         int find(string word);
-
+        string translate(int code);
 };
