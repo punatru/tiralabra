@@ -1,4 +1,5 @@
 #include "trie.h"
+#include "filereader.h"
 #include<string>
 #include<fstream>
 #include<iostream>
@@ -6,11 +7,10 @@ using namespace std;
 
 int main(int argc, char *argv[]) {
 	if(argc!=3){
-        cout<<"Usage: ./lzw inputfile outputfile"<<endl;
+        cout<<"Usage: ./decode inputfile outputfile"<<endl;
         return 0;
 	}
-    ifstream fin;
-    fin.open(argv[1]);
+    FileReader filereader(argv[1]);
 
     ofstream fout;
     fout.open(argv[2]);
@@ -18,22 +18,24 @@ int main(int argc, char *argv[]) {
     Trie trie;
     
     int  oldcode;
-    fin>>oldcode;
+    oldcode = filereader.read();
     char oldchar = (char)oldcode;
     fout<<oldchar;
-
-
     
-    while(!fin.eof()){
-        int newcode;
-        fin>>newcode;
+    
+    int newcode;
+    
+    newcode = filereader.read();
+    while(!filereader.eof()){
         string translation;
         if(trie.translate(newcode).empty()){
             translation = trie.translate(oldcode);
+       // cout<<oldcode<<endl;
             translation += oldchar;
         }
         else{
             translation = trie.translate(newcode);
+       // cout<<newcode<<endl;
         }
         fout<<translation;
         oldchar = translation[0];
@@ -45,7 +47,8 @@ int main(int argc, char *argv[]) {
 
         
         oldcode = newcode;
+        newcode = filereader.read();
     }
-    fin.close();
+    filereader.close();
     fout.close();
 }
