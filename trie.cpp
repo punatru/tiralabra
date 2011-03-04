@@ -1,31 +1,34 @@
-#include "trie.h"
+#include"trie.h"
 #include<string>
+#include<iostream>
 #include <cassert>
 using namespace std;
 Trie::Trie(){
     nextIndex = 256;
-    for(int i=0; i<256; i++){
+    isempty = false;
+    for(int i=0; i<nextIndex; i++){
     	Node* n = new Node(i, i, 0);
-        children.push_back(n);
-        nodes.push_back(n);
+        children.push(n);
+        nodes[i] = n;
+    }
+    for(int i=nextIndex; i<maxsize; i++){
+        nodes[i] = 0;
     }
 }	
 
 int Trie::find(string word){
     
-    int j = -1;
-    for(int i=0; i<children.size(); i++){
-        j =  nodes[i]->findWord(word, 0);
-        if(j!=-1) return j;
-    }
-    return -1;
+    return children.find(word[0])->findWord(word, 0);
 }
-
 void Trie::add(string word) {
-    Node* n = children[word[0]]->addWord(word, nextIndex, 1);
-    nodes.push_back(n);
-    
-    nextIndex++;
+    if(nextIndex == maxsize-1){
+        empty();
+    }else{
+        Node* n = children.find(word[0])->addWord(word, nextIndex, 1);
+        
+        nodes[nextIndex] = n;
+        nextIndex++;
+    }
 }
 
 string Trie::translate(int code){
@@ -36,3 +39,26 @@ string Trie::translate(int code){
     return word;
 }
 
+void Trie::empty(){
+	int size = children.getsize();
+    for(int i=0; i<size; i++){
+        delete children[i];
+    }
+    children.resize(0);
+    for(int i=0; i<maxsize; i++){
+    	nodes[i] = 0;
+    }
+    for(int i=0; i<256; i++){
+    	Node* n = new Node(i, i, 0);
+        children.push(n);
+        nodes[i] = n;
+    }
+    isempty = true;
+    nextIndex = 256;
+}
+
+bool Trie::isemptyed(){
+	bool emptyed = isempty;
+	isempty = false;
+    return emptyed;
+}

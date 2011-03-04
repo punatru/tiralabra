@@ -27,15 +27,21 @@ int main(int argc, char *argv[]) {
     
     newcode = filereader.read();
     while(!filereader.eof()){
+    	if(newcode==maxsize-1){
+            trie.empty();
+            oldcode = filereader.read();
+            oldchar = (char) oldcode;
+            fout<<trie.translate(oldcode);
+            newcode = filereader.read();
+            continue;
+    	}
         string translation;
         if(trie.translate(newcode).empty()){
             translation = trie.translate(oldcode);
-       // cout<<oldcode<<endl;
             translation += oldchar;
         }
         else{
             translation = trie.translate(newcode);
-       // cout<<newcode<<endl;
         }
         fout<<translation;
         oldchar = translation[0];
@@ -44,7 +50,6 @@ int main(int argc, char *argv[]) {
         finalword += trie.translate(oldcode);
         finalword += oldchar;
         trie.add(finalword);
-
         
         oldcode = newcode;
         newcode = filereader.read();

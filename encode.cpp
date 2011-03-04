@@ -20,28 +20,26 @@ int main(int argc, char *argv[]) {
 
     Trie trie;
 
-    bool lastiswritten = false;
-
     char a = fin.get();
+
 
     while(!fin.eof()){
         int code = trie.find(word+a);
         if(code!=-1){
             word = word+a;
-            lastiswritten = false;
         }else{
             filewriter.write(trie.find(word));
             trie.add(word+a);
             word = a;
-            lastiswritten = true;
         }
         a = fin.get();
+        if(trie.isemptyed()){
+            filewriter.writeemptymark();
+        }
     }
-
     
-//    if(lastiswritten!=true){
-        filewriter.write(trie.find(word));
-  //  }
+    
+    filewriter.write(trie.find(word));
     fin.close();
     filewriter.close();
 }
